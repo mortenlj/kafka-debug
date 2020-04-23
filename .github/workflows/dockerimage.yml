@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  release:
+    types: [ published ]
+    
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create tag for Docker image
+      run: echo "::set-env name=TAG::mortenlj/kafka-debug:$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)"
+    - name: Build the Docker image
+      run: docker build . --tag "${TAG}"
+    - name: Publish the Docker image
+      run: docker push --tag "${TAG}"
+      if: github.event == 'release'

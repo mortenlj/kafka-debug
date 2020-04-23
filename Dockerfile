@@ -1,4 +1,6 @@
-FROM confluentinc/cp-kafkacat:5.5.0
+FROM edenhill/kafkacat:1.5.0 as kafkacat
+
+FROM oyvindio/debug:latest-alpine
 
 ENV YQ_VERSION=3.3.0
 ENV KUBECTL_VERSION=v1.16.7
@@ -6,28 +8,15 @@ ENV KUBETAIL_VERSION=1.6.10
 ENV KUBESPY_VERSION=v0.5.1
 ENV K9S_VERSION=v0.19.2
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        curl \
-        vim \
-        nmap \
-        iputils-ping \
-        iputils-arping \
-        iputils-tracepath \
-        tcptraceroute \
-        strace \
-        socat \
-        netcat-openbsd \
-        mtr \
-        iperf \
-        tcpdump \
-        openssl \
-        ca-certificates \
+RUN apk add --no-cache \
         wget \
         httpie \
-        dnsutils \
         jq \
-    && rm -rf /var/lib/apt/lists/*
+        nano \
+        libcurl \
+        lz4-libs \
+        zstd-dev \
+        libsasl
 
 RUN mkdir -p /tmp/kubetail \
     && curl -SL https://github.com/johanhaleby/kubetail/archive/${KUBETAIL_VERSION}.tar.gz \
@@ -53,9 +42,11 @@ RUN mkdir -p /tmp/k9s \
 RUN curl -SLo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 \
     && chmod a+x /usr/local/bin/yq
 
-RUN curl -SLo /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
-    && chmod a+x /usr/local/bin/kubectl
+RUN chmod a+x /usr/local/bin/kubectl  #BUGFIX
+
+COPY --from=kafkacat /usr/bin/kafkacat /usr/bin/
 
 # TODO: Add some setup/scripts to get kafkacat working in the nav clusters
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["bash", "-c"]
+CMD ["sleep 9999999d"]

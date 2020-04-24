@@ -5,21 +5,38 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  release:
-    types: [ published ]
-    
+
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
+    - name: Create name for Docker image
+      run: echo "::set-env name=IMAGE_NAME::${{ github.repository }}"
     - name: Create tag for Docker image
-      run: echo "::set-env name=TAG::mortenlj/kafka-debug:$(date +%Y%m%d%H%M%S)-$(git rev-parse --short HEAD)"
+      run: echo "::set-env name=TAG::$(date +%Y%m%d%H%M%S)-$(git describe --always --dirty --exclude '*')"
     - name: Build the Docker image
-      run: docker build . --tag "${TAG}"
-    - name: Publish the Docker image
-      run: docker push --tag "${TAG}"
-      if: github.event == 'release'
+      run: docker build . --tag "${IMAGE_NAME}:${TAG}" --tag "${IMAGE_NAME}:latest"
+    - name: Export Docker Image
+      run: docker image save "${IMAGE_NAME}:${TAG}" "${IMAGE_NAME}:latest" | bzip2 > docker.tar.bz2
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.TAG }}
+        release_name: Release ${{ env.TAG }}
+        draft: true
+        prerelease: false
+      if: github.event == 'push'
+    - name: Upload release artifact
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./docker.tar.bz2
+        asset_name: docker.tar.bz2
+        asset_content_type: application/x-tar

@@ -1,0 +1,20 @@
+name: Publish Docker Image
+
+on:
+  release:
+    type: [ published ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create name for Docker image
+        run: echo "::set-env name=IMAGE_NAME::${{ github.repository }}"
+      - name: Find download URL
+        run: echo "::set-env name=DOWNLOAD_URL::$(curl -SL "${{ github.event.release }}" | jq '.assets[] | select(.name == "docker.tar.bz2") | .browser_download_url')
+      - name: Download the saved Docker image
+        run: curl -SLO "${DOWNLOAD_URL}"
+      - name: Load Docker Image
+        run: bunzip2 --stdout docker.tar.bz2 | docker image load
+      - name: Push Docker Image
+        run: docker push "${IMAGE_NAME}"

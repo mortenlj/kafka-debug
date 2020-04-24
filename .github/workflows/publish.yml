@@ -16,5 +16,10 @@ jobs:
         run: curl -SLO "${DOWNLOAD_URL}"
       - name: Load Docker Image
         run: bunzip2 --stdout docker.tar.bz2 | docker image load
+      - name: Login to Docker Hub
+        run: docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_TOKEN}"
+        env:
+          DOCKER_USERNAME: mortenlj
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: Push Docker Image
         run: docker push "${IMAGE_NAME}"

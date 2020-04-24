@@ -42,11 +42,9 @@ RUN mkdir -p /tmp/k9s \
 RUN curl -SLo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 \
     && chmod a+x /usr/local/bin/yq
 
-RUN chmod a+x /usr/local/bin/kubectl  #BUGFIX
-
 COPY --from=kafkacat /usr/bin/kafkacat /usr/bin/
 
-# TODO: Add some setup/scripts to get kafkacat working in the nav clusters
+# TODO: Add some setup/scripts to get needed config for kafkacat
 
 ENTRYPOINT ["bash", "-c"]
 CMD ["sleep 9999999d"]

@@ -16,7 +16,10 @@ RUN apk add --no-cache \
         libcurl \
         lz4-libs \
         zstd-dev \
-        libsasl
+        libsasl \
+        nmap \
+        wireshark
+
 
 RUN mkdir -p /tmp/kubetail \
     && curl -SL https://github.com/johanhaleby/kubetail/archive/${KUBETAIL_VERSION}.tar.gz \

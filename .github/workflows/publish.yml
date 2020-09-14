@@ -23,3 +23,5 @@ jobs:
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: Push Docker Image
         run: docker push "${IMAGE_NAME}"
+      - name: Delete Remaining Draft Releases
+        uses: hugo19941994/delete-draft-releases@v0.1.0

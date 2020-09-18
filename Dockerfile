@@ -18,7 +18,8 @@ RUN apk add --no-cache \
         zstd-dev \
         libsasl \
         nmap \
-        wireshark
+        wireshark \
+        coreutils
 
 
 RUN mkdir -p /tmp/kubetail \
@@ -47,7 +48,8 @@ RUN curl -SLo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/downloa
 
 COPY --from=kafkacat /usr/bin/kafkacat /usr/bin/
 
-COPY files/bash-*.sh /etc/profile.d/
+COPY files/profile.d/bash-*.sh /etc/profile.d/
+COPY files/root/.bash* /root/
 
 ENTRYPOINT ["bash", "-c"]
 CMD ["sleep 9999999d"]

@@ -12,9 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Create name for Docker image
-      run: echo "::set-env name=IMAGE_NAME::${{ github.repository }}"
+      run: echo "IMAGE_NAME=${{ github.repository }}" >> $GITHUB_ENV
     - name: Create tag for Docker image
-      run: echo "::set-env name=TAG::$(date +%Y%m%d%H%M%S)-$(git describe --always --dirty --exclude '*')"
+      run: echo "TAG=$(date +%Y%m%d%H%M%S)-$(git describe --always --dirty --exclude '*')" >> $GITHUB_ENV
     - name: Build the Docker image
       run: docker build . --tag "${IMAGE_NAME}:${TAG}" --tag "${IMAGE_NAME}:latest"
     - name: Export Docker Image

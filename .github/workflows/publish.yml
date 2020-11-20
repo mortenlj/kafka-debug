@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create name for Docker image
-        run: echo "::set-env name=IMAGE_NAME::${{ github.repository }}"
+        run: echo "IMAGE_NAME=${{ github.repository }}" >> $GITHUB_ENV
       - name: Find download URL
-        run: echo "::set-env name=DOWNLOAD_URL::$(curl -SL "${{ github.event.release.url }}" | jq -r '.assets[] | select(.name == "docker.tar.bz2") | .browser_download_url')"
+        run: echo "DOWNLOAD_URL=$(curl -SL "${{ github.event.release.url }}" | jq -r '.assets[] | select(.name == "docker.tar.bz2") | .browser_download_url')" >> $GITHUB_ENV
       - name: Download the saved Docker image
         run: curl -SLO "${DOWNLOAD_URL}"
       - name: Load Docker Image

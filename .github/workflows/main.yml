@@ -41,12 +41,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and possibly push
         env:
-          EARTHLY_PUSH: "${{ github.ref == 'refs/heads/main' }}"
+          EARTHLY_PUSH: "${{ github.ref == 'refs/heads/master' }}"
         run: |
           ./earthlyw --version
           ./earthlyw --ci --output "--remote-cache=${cache_image}" +deploy "--main_image=${main_image}" "--VERSION=${VERSION}"
       - name: Create release
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/master'
         id: create_release
         uses: softprops/action-gh-release@v1
         with:

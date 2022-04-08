@@ -29,7 +29,6 @@ tools:
             lz4-libs \
             zstd-dev \
             libsasl \
-            nmap \
             coreutils
 
     COPY files/profile.d/bash-*.sh /etc/profile.d/

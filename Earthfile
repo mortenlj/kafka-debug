@@ -29,7 +29,8 @@ tools:
             lz4-libs \
             zstd-dev \
             libsasl \
-            coreutils
+            coreutils \
+            mosquitto-clients
 
     COPY files/profile.d/bash-*.sh /etc/profile.d/
     COPY files/root/.bash* /root/

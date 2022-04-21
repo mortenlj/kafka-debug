@@ -1,3 +1,4 @@
+VERSION 0.6
 
 ARG TARGETARCH
 
@@ -35,7 +36,7 @@ tools:
     COPY files/profile.d/bash-*.sh /etc/profile.d/
     COPY files/root/.bash* /root/
 
-    ENTRYPOINT ["tail", "-f", "/dev/null"]
+    CMD ["tail", "-f", "/dev/null"]
 
 kubectl:
     FROM +tools

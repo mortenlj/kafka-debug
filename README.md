@@ -19,3 +19,17 @@ Most notable:
 - nano
 - vim
 - openssl
+
+## Usage
+
+Launch a docker container:
+
+`docker run -ti --rm ghcr.io/mortenlj/kafka-debug:latest bash`
+
+Launch into a kubernetes cluster:
+
+`kubectl run kafka-debug --image=ghcr.io/mortenlj/kafka-debug:latest`
+
+Exec into existing pod in kubernetes cluster:
+
+`kubectl exec -ti kafka-debug -- bash`

@@ -16,7 +16,7 @@ jobs:
         id: constants
         run: |
           export version="$(date +%Y%m%d%H%M%S)-$(git describe --always --dirty --exclude '*')"
-          echo "::set-output name=VERSION::${version}"
+          echo "VERSION=${version}" >> ${GITHUB_OUTPUT}
     outputs:
       VERSION: "${{ steps.constants.outputs.VERSION }}"
   build:

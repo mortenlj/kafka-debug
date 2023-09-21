@@ -68,7 +68,7 @@ kubespy:
     ARG KUBESPY_VERSION=v0.6.2
 
     RUN mkdir -p /tmp/kubespy \
-        && curl -SL https://github.com/pulumi/kubespy/releases/download/${KUBESPY_VERSION}/kubespy-linux-${TARGETARCH}.tar.gz \
+        && curl -SL https://github.com/pulumi/kubespy/releases/download/${KUBESPY_VERSION}/kubespy-${KUBESPY_VERSION}-linux-${TARGETARCH}.tar.gz \
         | tar -xzC /tmp/kubespy \
         && mv /tmp/kubespy/releases/kubespy-linux-${TARGETARCH}/kubespy /usr/local/bin/ \
         && chmod a+x /usr/local/bin/kubespy \

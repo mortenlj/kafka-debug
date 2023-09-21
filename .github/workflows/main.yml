@@ -1,6 +1,10 @@
 name: Build
 
-on: [ push ]
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '34 8 * * 2'
 
 env:
   main_image: ghcr.io/${{ github.repository }}

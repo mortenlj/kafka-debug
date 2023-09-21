@@ -104,6 +104,25 @@ yq:
     SAVE ARTIFACT /usr/local/bin/yq yq
     SAVE IMAGE --cache-hint
 
+grpcurl:
+    FROM +tools
+    ARG GRPCURL_VERSION=1.8.7
+
+    IF [ "${TARGETARCH}" == "amd64" ]
+        ARG ARCH="x86_64"
+    ELSE
+        ARG ARCH="${TARGETARCH}"
+    END
+
+    RUN mkdir -p /tmp/grpcurl \
+        && curl -SL https://github.com/fullstorydev/grpcurl/releases/download/v${GRPCURL_VERSION}/grpcurl_${GRPCURL_VERSION}_linux_${ARCH}.tar.gz \
+        | tar -xzC /tmp/grpcurl \
+        && mv /tmp/grpcurl/grpcurl /usr/local/bin/ \
+        && chmod a+x /usr/local/bin/grpcurl \
+        && rm -rf /tmp/grpcurl
+    SAVE ARTIFACT /usr/local/bin/grpcurl grpcurl
+    SAVE IMAGE --cache-hint
+
 kcat:
     FROM +tools
     ARG KCAT_VERSION=1.7.0

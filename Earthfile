@@ -80,14 +80,8 @@ k9s:
     FROM +tools
     ARG K9S_VERSION=v0.27.4
 
-    IF [ "${TARGETARCH}" == "amd64" ]
-        ARG ARCH="x86_64"
-    ELSE
-        ARG ARCH="${TARGETARCH}"
-    END
-
     RUN mkdir -p /tmp/k9s \
-        && curl -SL https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_${ARCH}.tar.gz \
+        && curl -SL https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_${TARGETARCH}.tar.gz \
         | tar -xzC /tmp/k9s \
         && mv /tmp/k9s/k9s /usr/local/bin/ \
         && chmod a+x /usr/local/bin/k9s \

@@ -70,7 +70,7 @@ kubespy:
     RUN mkdir -p /tmp/kubespy \
         && curl -SL https://github.com/pulumi/kubespy/releases/download/${KUBESPY_VERSION}/kubespy-${KUBESPY_VERSION}-linux-${TARGETARCH}.tar.gz \
         | tar -xzC /tmp/kubespy \
-        && mv /tmp/kubespy/releases/kubespy-linux-${TARGETARCH}/kubespy /usr/local/bin/ \
+        && mv /tmp/kubespy/kubespy /usr/local/bin/ \
         && chmod a+x /usr/local/bin/kubespy \
         && rm -rf /tmp/kubespy
     SAVE ARTIFACT /usr/local/bin/kubespy kubespy

@@ -139,6 +139,7 @@ docker:
     COPY +k9s/k9s /usr/local/bin/k9s
     COPY +yq/yq /usr/local/bin/yq
     COPY +kcat/kcat /usr/local/bin/kcat
+    COPY +grpcurl/grpcurl /usr/local/bin/grpcurl
     IF [ "${TARGETARCH}" == "amd64" ]
         COPY +kubespy/kubespy /usr/local/bin/kubespy
     END

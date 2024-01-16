@@ -31,7 +31,8 @@ tools:
             zstd-dev \
             libsasl \
             coreutils \
-            mosquitto-clients
+            mosquitto-clients \
+            postgresql15-client
 
     COPY files/profile.d/bash-*.sh /etc/profile.d/
     COPY files/root/.bash* /root/

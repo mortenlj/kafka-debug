@@ -32,7 +32,8 @@ tools:
             libsasl \
             coreutils \
             mosquitto-clients \
-            postgresql15-client
+            postgresql15-client \
+            hey
 
     COPY files/profile.d/bash-*.sh /etc/profile.d/
     COPY files/root/.bash* /root/

@@ -35,8 +35,7 @@ tools:
             postgresql15-client \
             hey
 
-    COPY files/profile.d/bash-*.sh /etc/profile.d/
-    COPY files/root/.bash* /root/
+    COPY files/bash/bash-*.sh /etc/bash/
 
     CMD ["tail", "-f", "/dev/null"]
 

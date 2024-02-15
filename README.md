@@ -19,6 +19,10 @@ Most notable:
 - nano
 - vim
 - openssl
+- mosquitto-clients
+- postgresql15-client
+- redis
+
 
 ## Usage
 

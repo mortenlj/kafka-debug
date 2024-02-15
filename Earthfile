@@ -33,7 +33,8 @@ tools:
             coreutils \
             mosquitto-clients \
             postgresql15-client \
-            hey
+            hey \
+            redis
 
     COPY files/bash/bash-*.sh /etc/bash/
 

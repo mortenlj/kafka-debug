@@ -47,12 +47,17 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install earthly
+        uses: earthly/actions-setup@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          use-cache: true
       - name: Build and possibly push
         env:
           EARTHLY_PUSH: "${{ github.ref == 'refs/heads/master' }}"
         run: |
-          ./earthlyw --version
-          ./earthlyw --ci --output "--remote-cache=${cache_image}" +deploy "--main_image=${main_image}" "--VERSION=${VERSION}"
+          earthly --version
+          earthly --ci --output "--remote-cache=${cache_image}" +deploy "--main_image=${main_image}" "--VERSION=${VERSION}"
       - name: Create release
         if: github.ref == 'refs/heads/master'
         id: create_release

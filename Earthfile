@@ -42,7 +42,7 @@ tools:
 
 kubectl:
     FROM +tools
-    ARG KUBECTL_VERSION=v1.27.4
+    ARG KUBECTL_VERSION=v1.29.3
 
     RUN curl -Lo /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl && \
         curl -Lo /tmp/kubectl.sha256 https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl.sha256 && \
@@ -54,7 +54,7 @@ kubectl:
 
 kubetail:
     FROM +tools
-    ARG KUBETAIL_VERSION=1.6.18
+    ARG KUBETAIL_VERSION=1.6.20
 
     RUN mkdir -p /tmp/kubetail \
         && curl -SL https://github.com/johanhaleby/kubetail/archive/${KUBETAIL_VERSION}.tar.gz \
@@ -67,7 +67,7 @@ kubetail:
 
 kubespy:
     FROM +tools
-    ARG KUBESPY_VERSION=v0.6.2
+    ARG KUBESPY_VERSION=v0.6.3
 
     RUN mkdir -p /tmp/kubespy \
         && curl -SL https://github.com/pulumi/kubespy/releases/download/${KUBESPY_VERSION}/kubespy-${KUBESPY_VERSION}-linux-${TARGETARCH}.tar.gz \
@@ -80,7 +80,7 @@ kubespy:
 
 k9s:
     FROM +tools
-    ARG K9S_VERSION=v0.27.4
+    ARG K9S_VERSION=v0.32.4
 
     RUN mkdir -p /tmp/k9s \
         && curl -SL https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_${TARGETARCH}.tar.gz \
@@ -93,7 +93,7 @@ k9s:
 
 yq:
     FROM +tools
-    ARG YQ_VERSION=v4.35.1
+    ARG YQ_VERSION=v4.43.1
 
     RUN curl -SLo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_${TARGETARCH} \
         && chmod a+x /usr/local/bin/yq
@@ -102,16 +102,10 @@ yq:
 
 grpcurl:
     FROM +tools
-    ARG GRPCURL_VERSION=1.8.7
-
-    IF [ "${TARGETARCH}" == "amd64" ]
-        ARG ARCH="x86_64"
-    ELSE
-        ARG ARCH="${TARGETARCH}"
-    END
+    ARG GRPCURL_VERSION=1.9.1
 
     RUN mkdir -p /tmp/grpcurl \
-        && curl -SL https://github.com/fullstorydev/grpcurl/releases/download/v${GRPCURL_VERSION}/grpcurl_${GRPCURL_VERSION}_linux_${ARCH}.tar.gz \
+        && curl -SL https://github.com/fullstorydev/grpcurl/releases/download/v${GRPCURL_VERSION}/grpcurl_${GRPCURL_VERSION}_linux_${TARGETARCH}.tar.gz \
         | tar -xzC /tmp/grpcurl \
         && mv /tmp/grpcurl/grpcurl /usr/local/bin/ \
         && chmod a+x /usr/local/bin/grpcurl \
@@ -142,9 +136,7 @@ docker:
     COPY +yq/yq /usr/local/bin/yq
     COPY +kcat/kcat /usr/local/bin/kcat
     COPY +grpcurl/grpcurl /usr/local/bin/grpcurl
-    IF [ "${TARGETARCH}" == "amd64" ]
-        COPY +kubespy/kubespy /usr/local/bin/kubespy
-    END
+    COPY +kubespy/kubespy /usr/local/bin/kubespy
 
     # builtins must be declared
     ARG EARTHLY_GIT_PROJECT_NAME

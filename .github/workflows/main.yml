@@ -38,10 +38,12 @@ jobs:
           - linux/amd64
           - linux/arm64
         target:
-          - kcat
           - kubetail
           - grpcurl
           - yq
+        include:
+          - platform: linux/amd64
+            target: kcat
     env:
       VERSION: "${{ needs.setup.outputs.VERSION }}"
     steps:

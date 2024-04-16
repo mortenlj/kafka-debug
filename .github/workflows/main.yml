@@ -78,7 +78,7 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
-          earthly --platform ${{ matrix.platform }} "--remote-cache=${cache_image}" +${{ matrix.target }} "--main_image=${main_image}" "--VERSION=${VERSION}"
+          earthly --platform ${{ matrix.platform }} +${{ matrix.target }} "--main_image=${main_image}" "--VERSION=${VERSION}"
 
   build:
     name: Build

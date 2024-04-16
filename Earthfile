@@ -104,8 +104,14 @@ grpcurl:
     FROM +tools
     ARG GRPCURL_VERSION=1.9.1
 
+    IF [ "${TARGETARCH}" == "amd64" ]
+        ARG ARCH="x86_64"
+    ELSE
+        ARG ARCH="${TARGETARCH}"
+    END
+
     RUN mkdir -p /tmp/grpcurl \
-        && curl -SL https://github.com/fullstorydev/grpcurl/releases/download/v${GRPCURL_VERSION}/grpcurl_${GRPCURL_VERSION}_linux_${TARGETARCH}.tar.gz \
+        && curl -SL https://github.com/fullstorydev/grpcurl/releases/download/v${GRPCURL_VERSION}/grpcurl_${GRPCURL_VERSION}_linux_${ARCH}.tar.gz \
         | tar -xzC /tmp/grpcurl \
         && mv /tmp/grpcurl/grpcurl /usr/local/bin/ \
         && chmod a+x /usr/local/bin/grpcurl \

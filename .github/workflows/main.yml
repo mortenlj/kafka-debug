@@ -39,10 +39,7 @@ jobs:
           - linux/arm64
         target:
           - kcat
-          - k9s
-          - kubectl
           - kubetail
-          - kubespy
           - grpcurl
           - yq
     env:

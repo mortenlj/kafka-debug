@@ -55,6 +55,14 @@ jobs:
       - name: Build and possibly push
         env:
           EARTHLY_PUSH: "${{ github.ref == 'refs/heads/master' }}"
+          EARTHLY_VERBOSE: true
+          EARTHLY_FULL_TARGET: true
+          EARTHLY_OUTPUT: true
+          EARTHLY_ORG: ${{ secrets.EARTHLY_ORG }}
+          EARTHLY_SATELLITE: ${{ secrets.EARTHLY_SATELLITE }}
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           earthly --version
           earthly --ci --output "--remote-cache=${cache_image}" +deploy "--main_image=${main_image}" "--VERSION=${VERSION}"

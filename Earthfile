@@ -65,6 +65,19 @@ kubetail:
     SAVE ARTIFACT /usr/local/bin/kubetail kubetail
     SAVE IMAGE --cache-hint
 
+kubeseal:
+    FROM +tools
+
+    RUN mkdir -p /tmp/kubeseal \
+        && export KUBESEAL_VERSION=$(curl -s https://api.github.com/repos/bitnami-labs/sealed-secrets/tags | jq -r '.[0].name' | cut -c 2-) \
+        && curl -SL https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-${TARGETARCH}.tar.gz \
+        | tar -xzC /tmp/kubeseal \
+        && mv /tmp/kubeseal/kubeseal /usr/local/bin/ \
+        && chmod a+x /usr/local/bin/kubeseal \
+        && rm -rf /tmp/kubeseal
+    SAVE ARTIFACT /usr/local/bin/kubeseal kubeseal
+    SAVE IMAGE --cache-hint
+
 kubespy:
     FROM +tools
     ARG KUBESPY_VERSION=v0.6.3
@@ -138,6 +151,7 @@ docker:
     FROM +tools
     COPY +kubectl/kubectl /usr/local/bin/kubectl
     COPY +kubetail/kubetail /usr/local/bin/kubetail
+    COPY +kubeseal/kubeseal /usr/local/bin/kubeseal
     COPY +k9s/k9s /usr/local/bin/k9s
     COPY +yq/yq /usr/local/bin/yq
     COPY +grpcurl/grpcurl /usr/local/bin/grpcurl

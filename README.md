@@ -4,12 +4,14 @@ A docker image used for debugging kafka and kubernetes related issues
 Installs many tools (see the [Earthfile](./Earthfile) for details).
 
 Most notable:
-- kcat
+- [kcat](https://github.com/edenhill/kcat)
 - kubectl
-- kubetail
-- kubespy
-- k9s
-- yq
+- [kubetail](https://github.com/johanhaleby/kubetail)
+- [kubespy](https://github.com/pulumi/kubespy)
+- [kubeseal](https://github.com/bitnami-labs/sealed-secrets)
+- [k9s](https://github.com/derailed/k9s)
+- [yq](https://github.com/mikefarah/yq)
+- [grpcurl](https://github.com/fullstorydev/grpcurl)
 - curl
 - wget
 - httpie

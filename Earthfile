@@ -34,7 +34,8 @@ tools:
             mosquitto-clients \
             postgresql15-client \
             hey \
-            redis
+            redis \
+            valkey
 
     COPY files/bash/bash-*.sh /etc/bash/
 

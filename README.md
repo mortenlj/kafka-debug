@@ -24,6 +24,7 @@ Most notable:
 - mosquitto-clients
 - postgresql15-client
 - redis
+- valkey
 
 
 ## Usage

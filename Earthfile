@@ -35,7 +35,7 @@ tools:
             postgresql15-client \
             hey \
             redis \
-            valkey
+            valkey-cli
 
     COPY files/bash/bash-*.sh /etc/bash/
 

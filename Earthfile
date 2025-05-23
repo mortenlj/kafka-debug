@@ -32,7 +32,7 @@ tools:
             libsasl \
             coreutils \
             mosquitto-clients \
-            postgresql15-client \
+            postgresql17-client \
             hey \
             redis \
             valkey-cli

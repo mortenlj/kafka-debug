@@ -22,7 +22,7 @@ Most notable:
 - vim
 - openssl
 - mosquitto-clients
-- postgresql15-client
+- postgresql17-client
 - redis
 - valkey
 

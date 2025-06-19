@@ -1,6 +1,6 @@
 [tools]
+grpcurl = "latest"
 kafkactl = "latest"
 kubeseal = "latest"
 kubespy = "latest"
-grpcurl = "latest"
 "ubi:kubetail-org/kubetail" = "latest"

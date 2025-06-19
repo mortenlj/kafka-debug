@@ -7,40 +7,40 @@ tools:
 
     RUN apk add --no-cache \
             bash \
-            curl \
-            vim \
-            nmap \
-            iputils \
-            tcptraceroute \
-            strace \
             bind-tools \
-            socat \
-            netcat-openbsd \
-            mtr \
-            iperf \
-            tcpdump \
             busybox-extras \
-            openssl \
             ca-certificates \
-            wget \
-            httpie \
-            jq \
-            yq \
-            nano \
-            libcurl \
-            lz4-libs \
-            zstd-dev \
-            libsasl \
             coreutils \
-            mosquitto-clients \
-            postgresql17-client \
-            postgresql16-client \
-            postgresql15-client \
+            curl \
             hey \
-            redis \
-            valkey-cli \
+            httpie \
+            iperf \
+            iputils \
+            jq \
+            k9s \
             kubectl \
-            k9s
+            libcurl \
+            libsasl \
+            lz4-libs \
+            mosquitto-clients \
+            mtr \
+            nano \
+            netcat-openbsd \
+            nmap \
+            openssl \
+            postgresql15-client \
+            postgresql16-client \
+            postgresql17-client \
+            redis \
+            socat \
+            strace \
+            tcpdump \
+            tcptraceroute \
+            valkey-cli \
+            vim \
+            wget \
+            yq \
+            zstd-dev
 
     COPY files/bash/bash-*.sh /etc/bash/
 

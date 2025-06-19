@@ -1,10 +1,10 @@
 # kafka-debug
 A docker image used for debugging kafka and kubernetes related issues
 
-Installs many tools (see the [Earthfile](./Earthfile) for details).
+Installs many tools (see the [Earthfile](./Earthfile) or [mise.toml](./mise.toml) for details).
 
 Most notable:
-- [kcat](https://github.com/edenhill/kcat)
+- [kafkactl](https://github.com/deviceinsight/kafkactl)
 - kubectl
 - [kubetail](https://github.com/johanhaleby/kubetail)
 - [kubespy](https://github.com/pulumi/kubespy)
@@ -23,8 +23,10 @@ Most notable:
 - openssl
 - mosquitto-clients
 - postgresql17-client
+- postgresql16-client
+- postgresql15-client
 - redis
-- valkey
+- valkey-cli
 
 
 ## Usage

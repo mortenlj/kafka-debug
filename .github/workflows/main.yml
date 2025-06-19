@@ -37,13 +37,6 @@ jobs:
         platform:
           - linux/amd64
           - linux/arm64
-        target:
-          - kubetail
-          - grpcurl
-          - yq
-        include:
-          - platform: linux/amd64
-            target: kcat
     env:
       VERSION: "${{ needs.setup.outputs.VERSION }}"
     steps:
@@ -77,7 +70,7 @@ jobs:
           DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
-          earthly --platform ${{ matrix.platform }} +${{ matrix.target }} "--main_image=${main_image}" "--VERSION=${VERSION}"
+          earthly --platform ${{ matrix.platform }} +docker "--main_image=${main_image}" "--VERSION=${VERSION}"
 
   build:
     name: Build

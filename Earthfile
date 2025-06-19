@@ -133,19 +133,18 @@ grpcurl:
     SAVE ARTIFACT /usr/local/bin/grpcurl grpcurl
     SAVE IMAGE --cache-hint
 
-kcat:
+kafkactl:
     FROM +tools
-    ARG KCAT_VERSION=1.7.0
-    ARG BUILD_DEPS=bash make gcc g++ cmake curl pkgconfig python3 perl bsd-compat-headers zlib-dev zstd-dev zstd-libs lz4-dev openssl-dev curl-dev
+    ARG TOOL_NAME=kafkactl
+    ARG GITHUB_REPO=deviceinsight/kafkactl
+    ARG VERSION=5.9.0
 
-    RUN mkdir -p /tmp/kcat \
-        && curl -SL https://github.com/edenhill/kcat/archive/refs/tags/${KCAT_VERSION}.tar.gz \
-        | tar -xzC /tmp/kcat \
-        && apk add --no-cache --virtual .dev_pkgs $BUILD_DEPS \
-        && cd /tmp/kcat/kcat-${KCAT_VERSION} \
-        && ./bootstrap.sh --no-install-deps --no-enable-static \
-        && mv kcat /usr/local/bin/kcat
-    SAVE ARTIFACT /usr/local/bin/kcat kcat
+    RUN mkdir -p /tmp/${TOOL_NAME} \
+        && curl -SL https://github.com/${GITHUB_REPO}/releases/download/v${VERSION}/${TOOL_NAME}_${VERSION}_linux_${TARGETARCH}.tar.gz \
+        | tar -xzC /tmp/${TOOL_NAME} \
+        && mv /tmp/${TOOL_NAME}/${TOOL_NAME} /usr/local/bin/ \
+        && chmod a+x /usr/local/bin/${TOOL_NAME}
+    SAVE ARTIFACT /usr/local/bin/${TOOL_NAME} ${TOOL_NAME}
     SAVE IMAGE --cache-hint
 
 docker:
@@ -157,9 +156,7 @@ docker:
     COPY +yq/yq /usr/local/bin/yq
     COPY +grpcurl/grpcurl /usr/local/bin/grpcurl
     COPY +kubespy/kubespy /usr/local/bin/kubespy
-    IF [ "${TARGETARCH}" == "amd64" ]
-        COPY +kcat/kcat /usr/local/bin/kcat
-    END
+    COPY +kafkactl/kafkactl /usr/local/bin/kafkactl
 
     # builtins must be declared
     ARG EARTHLY_GIT_PROJECT_NAME

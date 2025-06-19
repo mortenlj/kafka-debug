@@ -25,6 +25,7 @@ tools:
             wget \
             httpie \
             jq \
+            yq \
             nano \
             libcurl \
             lz4-libs \
@@ -35,128 +36,30 @@ tools:
             postgresql17-client \
             hey \
             redis \
-            valkey-cli
+            valkey-cli \
+            kubectl \
+            k9s
 
     COPY files/bash/bash-*.sh /etc/bash/
 
     CMD ["tail", "-f", "/dev/null"]
 
-kubectl:
-    FROM +tools
-    ARG KUBECTL_VERSION=v1.29.3
-
-    RUN curl -Lo /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl && \
-        curl -Lo /tmp/kubectl.sha256 https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl.sha256 && \
-        echo "$(cat /tmp/kubectl.sha256)  /usr/local/bin/kubectl" | sha256sum -c -  && \
-        rm -f /tmp/kubectl.sha256 && \
-        chmod a+x /usr/local/bin/kubectl
-    SAVE ARTIFACT /usr/local/bin/kubectl kubectl
-    SAVE IMAGE --cache-hint
-
-kubetail:
-    FROM +tools
-    ARG KUBETAIL_VERSION=1.6.20
-
-    RUN mkdir -p /tmp/kubetail \
-        && curl -SL https://github.com/johanhaleby/kubetail/archive/${KUBETAIL_VERSION}.tar.gz \
-        | tar -xzC /tmp/kubetail \
-        && mv /tmp/kubetail/kubetail-${KUBETAIL_VERSION}/kubetail /usr/local/bin/ \
-        && chmod a+x /usr/local/bin/kubetail \
-        && rm -rf /tmp/kubetail
-    SAVE ARTIFACT /usr/local/bin/kubetail kubetail
-    SAVE IMAGE --cache-hint
-
-kubeseal:
+mise:
     FROM +tools
 
-    RUN mkdir -p /tmp/kubeseal \
-        && export KUBESEAL_VERSION=$(curl -s https://api.github.com/repos/bitnami-labs/sealed-secrets/tags | jq -r '.[0].name' | cut -c 2-) \
-        && curl -SL https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-${TARGETARCH}.tar.gz \
-        | tar -xzC /tmp/kubeseal \
-        && mv /tmp/kubeseal/kubeseal /usr/local/bin/ \
-        && chmod a+x /usr/local/bin/kubeseal \
-        && rm -rf /tmp/kubeseal
-    SAVE ARTIFACT /usr/local/bin/kubeseal kubeseal
-    SAVE IMAGE --cache-hint
+    RUN apk add --no-cache \
+            mise
 
-kubespy:
-    FROM +tools
-    ARG KUBESPY_VERSION=v0.6.3
-
-    RUN mkdir -p /tmp/kubespy \
-        && curl -SL https://github.com/pulumi/kubespy/releases/download/${KUBESPY_VERSION}/kubespy-${KUBESPY_VERSION}-linux-${TARGETARCH}.tar.gz \
-        | tar -xzC /tmp/kubespy \
-        && mv /tmp/kubespy/kubespy /usr/local/bin/ \
-        && chmod a+x /usr/local/bin/kubespy \
-        && rm -rf /tmp/kubespy
-    SAVE ARTIFACT /usr/local/bin/kubespy kubespy
-    SAVE IMAGE --cache-hint
-
-k9s:
-    FROM +tools
-    ARG K9S_VERSION=v0.32.4
-
-    RUN mkdir -p /tmp/k9s \
-        && curl -SL https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_${TARGETARCH}.tar.gz \
-        | tar -xzC /tmp/k9s \
-        && mv /tmp/k9s/k9s /usr/local/bin/ \
-        && chmod a+x /usr/local/bin/k9s \
-        && rm -rf /tmp/k9s
-    SAVE ARTIFACT /usr/local/bin/k9s k9s
-    SAVE IMAGE --cache-hint
-
-yq:
-    FROM +tools
-    ARG YQ_VERSION=v4.43.1
-
-    RUN curl -SLo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_${TARGETARCH} \
-        && chmod a+x /usr/local/bin/yq
-    SAVE ARTIFACT /usr/local/bin/yq yq
-    SAVE IMAGE --cache-hint
-
-grpcurl:
-    FROM +tools
-    ARG GRPCURL_VERSION=1.9.1
-
-    IF [ "${TARGETARCH}" == "amd64" ]
-        ARG ARCH="x86_64"
-    ELSE
-        ARG ARCH="${TARGETARCH}"
-    END
-
-    RUN mkdir -p /tmp/grpcurl \
-        && curl -SL https://github.com/fullstorydev/grpcurl/releases/download/v${GRPCURL_VERSION}/grpcurl_${GRPCURL_VERSION}_linux_${ARCH}.tar.gz \
-        | tar -xzC /tmp/grpcurl \
-        && mv /tmp/grpcurl/grpcurl /usr/local/bin/ \
-        && chmod a+x /usr/local/bin/grpcurl \
-        && rm -rf /tmp/grpcurl
-    SAVE ARTIFACT /usr/local/bin/grpcurl grpcurl
-    SAVE IMAGE --cache-hint
-
-kafkactl:
-    FROM +tools
-    ARG TOOL_NAME=kafkactl
-    ARG GITHUB_REPO=deviceinsight/kafkactl
-    ARG VERSION=5.9.0
-
-    RUN mkdir -p /tmp/${TOOL_NAME} \
-        && curl -SL https://github.com/${GITHUB_REPO}/releases/download/v${VERSION}/${TOOL_NAME}_${VERSION}_linux_${TARGETARCH}.tar.gz \
-        | tar -xzC /tmp/${TOOL_NAME} \
-        && mv /tmp/${TOOL_NAME}/${TOOL_NAME} /usr/local/bin/ \
-        && chmod a+x /usr/local/bin/${TOOL_NAME}
-    SAVE ARTIFACT /usr/local/bin/${TOOL_NAME} ${TOOL_NAME}
+    COPY mise.toml .
+    RUN mise trust /mise.toml \
+        && mise install \
+        && cp /root/.local/share/mise/installs/*/latest/* /usr/local/bin/
+    SAVE ARTIFACT /usr/local/bin localbin
     SAVE IMAGE --cache-hint
 
 docker:
     FROM +tools
-    COPY +kubectl/kubectl /usr/local/bin/kubectl
-    COPY +kubetail/kubetail /usr/local/bin/kubetail
-    COPY +kubeseal/kubeseal /usr/local/bin/kubeseal
-    COPY +k9s/k9s /usr/local/bin/k9s
-    COPY +yq/yq /usr/local/bin/yq
-    COPY +grpcurl/grpcurl /usr/local/bin/grpcurl
-    COPY +kubespy/kubespy /usr/local/bin/kubespy
-    COPY +kafkactl/kafkactl /usr/local/bin/kafkactl
+    COPY +mise/localbin /usr/local/bin
 
     # builtins must be declared
     ARG EARTHLY_GIT_PROJECT_NAME

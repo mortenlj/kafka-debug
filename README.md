@@ -14,6 +14,7 @@ Most notable:
 - [kubeseal](https://github.com/bitnami-labs/sealed-secrets)
 - [kubespy](https://github.com/pulumi/kubespy)
 - [kubetail](https://github.com/johanhaleby/kubetail)
+- micro
 - mosquitto-clients
 - nano
 - nmap

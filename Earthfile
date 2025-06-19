@@ -22,6 +22,7 @@ tools:
             libcurl \
             libsasl \
             lz4-libs \
+            micro \
             mosquitto-clients \
             mtr \
             nano \

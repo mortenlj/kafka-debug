@@ -1,0 +1,3 @@
+[tools]
+"pipx:pgcli" = "latest"
+"pipx:mycli" = "latest"

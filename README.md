@@ -16,9 +16,11 @@ Most notable:
 - [kubetail](https://github.com/johanhaleby/kubetail)
 - micro
 - mosquitto-clients
+- [mycli](https://www.mycli.net)
 - nano
 - nmap
 - openssl
+- [pgcli](https://www.pgcli.com)
 - postgresql15-client
 - postgresql16-client
 - postgresql17-client

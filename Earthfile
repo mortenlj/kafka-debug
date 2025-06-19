@@ -51,15 +51,33 @@ mise:
     FROM +tools
 
     RUN apk add --no-cache \
-            mise
+            mise \
+            cosign \
+            uv
 
-    COPY mise.toml .
+    SAVE IMAGE --cache-hint
 
+mise-tools:
+    FROM +mise
+    COPY mise.toml /
     RUN mise trust /mise.toml
+
+    ENV MISE_DATA_DIR=/mise_data
     RUN mise install
-    RUN find /root/.local/share/mise/installs/*/latest/ -executable -type f -exec cp {} /usr/local/bin +
+    RUN find ${MISE_DATA_DIR}/installs/*/latest/ -executable -type f -exec cp {} /usr/local/bin +
 
     SAVE ARTIFACT /usr/local/bin localbin
+    SAVE IMAGE --cache-hint
+
+mise-pipx:
+    FROM +mise
+    COPY mise.pipx.toml /
+    RUN mise trust /mise.pipx.toml
+
+    ENV MISE_DATA_DIR=/mise_pipx
+    RUN mise install --env pipx
+
+    SAVE ARTIFACT /mise_pipx pipx
     SAVE IMAGE --cache-hint
 
 kubetail:
@@ -76,7 +94,8 @@ kubetail:
 
 docker:
     FROM +tools
-    COPY +mise/localbin /usr/local/bin
+    COPY +mise-tools/localbin /usr/local/bin
+    COPY --dir +mise-pipx/pipx /mise_pipx
     COPY +kubetail/kubetail /usr/local/bin/kubetail
 
     # builtins must be declared

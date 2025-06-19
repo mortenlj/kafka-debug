@@ -157,3 +157,4 @@ tags
 [._]*.un~
 
 nais
+.secret

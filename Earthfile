@@ -63,7 +63,7 @@ mise-tools:
     RUN mise trust /mise.toml
 
     ENV MISE_DATA_DIR=/mise_data
-    RUN mise install
+    RUN --secret GITHUB_TOKEN mise install
     RUN find ${MISE_DATA_DIR}/installs/*/latest/ -executable -type f -exec cp {} /usr/local/bin +
 
     SAVE ARTIFACT /usr/local/bin localbin
@@ -75,7 +75,7 @@ mise-pipx:
     RUN mise trust /mise.pipx.toml
 
     ENV MISE_DATA_DIR=/mise_pipx
-    RUN mise install --env pipx
+    RUN --secret GITHUB_TOKEN mise install --env pipx
 
     SAVE ARTIFACT /mise_pipx pipx
     SAVE IMAGE --cache-hint

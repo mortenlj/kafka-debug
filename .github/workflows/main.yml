@@ -69,8 +69,9 @@ jobs:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
           DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          earthly --platform ${{ matrix.platform }} +docker "--main_image=${main_image}" "--VERSION=${VERSION}"
+          earthly --platform ${{ matrix.platform }} --secret GITHUB_TOKEN +docker "--main_image=${main_image}" "--VERSION=${VERSION}"
 
   build:
     name: Build
@@ -110,9 +111,10 @@ jobs:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
           DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           earthly --version
-          earthly "--remote-cache=${cache_image}" +deploy "--main_image=${main_image}" "--VERSION=${VERSION}"
+          earthly "--remote-cache=${cache_image}" --secret GITHUB_TOKEN +deploy "--main_image=${main_image}" "--VERSION=${VERSION}"
       - name: Create release
         if: github.ref == 'refs/heads/master'
         id: create_release

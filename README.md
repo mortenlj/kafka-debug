@@ -45,3 +45,14 @@ Launch into a kubernetes cluster:
 Exec into existing pod in kubernetes cluster:
 
 `kubectl exec -ti kafka-debug -- bash`
+
+## Building locally
+
+The build on GitHub wants a GITHUB_TOKEN, which is usually not needed locally.
+Just put the following in a file called `.secret`:
+
+```
+GITHUB_TOKEN=
+```
+
+Then build with: `earthly +deploy`

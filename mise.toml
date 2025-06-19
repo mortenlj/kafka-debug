@@ -2,5 +2,4 @@
 grpcurl = "latest"
 kafkactl = "latest"
 kubeseal = "latest"
-kubespy = "latest"
-"ubi:kubetail-org/kubetail" = "latest"
+"asdf:kubespy" = "latest"

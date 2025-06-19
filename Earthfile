@@ -54,15 +54,30 @@ mise:
             mise
 
     COPY mise.toml .
-    RUN mise trust /mise.toml \
-        && mise install \
-        && cp /root/.local/share/mise/installs/*/latest/* /usr/local/bin/
+
+    RUN mise trust /mise.toml
+    RUN mise install
+    RUN find /root/.local/share/mise/installs/*/latest/ -executable -type f -exec cp {} /usr/local/bin +
+
     SAVE ARTIFACT /usr/local/bin localbin
+    SAVE IMAGE --cache-hint
+
+kubetail:
+    FROM +tools
+    ARG KUBETAIL_VERSION=1.6.20
+
+    RUN mkdir -p /tmp/kubetail
+    RUN curl -SL https://github.com/johanhaleby/kubetail/archive/${KUBETAIL_VERSION}.tar.gz | tar -xzC /tmp/kubetail
+    RUN mv /tmp/kubetail/kubetail-${KUBETAIL_VERSION}/kubetail /usr/local/bin/
+    RUN chmod a+x /usr/local/bin/kubetail
+
+    SAVE ARTIFACT /usr/local/bin/kubetail kubetail
     SAVE IMAGE --cache-hint
 
 docker:
     FROM +tools
     COPY +mise/localbin /usr/local/bin
+    COPY +kubetail/kubetail /usr/local/bin/kubetail
 
     # builtins must be declared
     ARG EARTHLY_GIT_PROJECT_NAME

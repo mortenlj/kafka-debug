@@ -34,6 +34,8 @@ tools:
             coreutils \
             mosquitto-clients \
             postgresql17-client \
+            postgresql16-client \
+            postgresql15-client \
             hey \
             redis \
             valkey-cli \

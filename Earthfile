@@ -53,7 +53,9 @@ mise:
     RUN apk add --no-cache \
             mise \
             cosign \
-            uv
+            uv \
+            rust \
+            build-base
 
     SAVE IMAGE --cache-hint
 

@@ -29,9 +29,9 @@ tools:
             netcat-openbsd \
             nmap \
             openssl \
-            postgresql15-client \
             postgresql16-client \
             postgresql17-client \
+            postgresql18-client \
             redis \
             socat \
             strace \
